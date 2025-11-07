@@ -5,6 +5,7 @@ import '../styles/RegisterStyles.css'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { showLoading, hideLoading } from '../redux/features/alertSlice'
+import { getUser } from '../redux/features/userSlice'
 
 
 const Login = () => {
@@ -18,7 +19,9 @@ const Login = () => {
       dispatch(hideLoading())
       if(res.data.success){
         localStorage.setItem('token', res.data.token)
-        message.success('login successfully')
+         localStorage.setItem("user", JSON.stringify(res.data.user)); 
+        dispatch(getUser(res.data.user));
+         message.success('login successfully')
         navigate('/')
 
       }else{
