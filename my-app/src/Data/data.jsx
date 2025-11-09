@@ -11,8 +11,8 @@ export const userMenu = [
     
     },
     {
-        name: "Doctors appointment",
-        path: '/doctors',
+        name: "Apply Doctor",
+        path: '/apply-doctor',
         icon: "fa-solid fa-user-doctor",
     },
     {
