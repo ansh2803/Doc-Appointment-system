@@ -16,6 +16,7 @@ const connectDB = require('./config/db')
 connectDB()
 //routes
 app.use('/api/v1/user', require('./routes/userRoutes'))
+app.use('/api/v1/admin', require('./routes/adminRoutes'))
 
 //port
 const port = process.env.PORT || 8080

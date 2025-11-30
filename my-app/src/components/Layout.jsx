@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux';
 import { userMenu, adminMenu } from '../Data/data';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '../redux/features/userSlice';
+import { Badge } from 'antd';
+
+
 
 const Layout = ({ children }) => {
   const { user: reduxUser } = useSelector((state) => state.user);
@@ -61,7 +64,12 @@ const Layout = ({ children }) => {
           <div className="content">
             <div className="header">
               <div className="header-content">
-                <i className="fa-solid fa-bell"></i>
+              <span style={{cursor:'pointer'}}
+              onClick={()=> {Navigate('/notification')}}>
+               <Badge count={user?.Notification?.length || 0}>
+                 <i className="fa-solid fa-bell"></i>
+               </Badge>
+               </span>
                 <Link to='/profile'>{user?.name}</Link>
               </div>
             </div>

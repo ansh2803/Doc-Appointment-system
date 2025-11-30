@@ -9,7 +9,8 @@ module.exports = async (req, res, next)=> {
                 success: false
             })
         }else {
-            req.body.userId = decoded.id
+            // req.body.userId = decoded.id
+            req.user = decoded
             next()
         }
     })

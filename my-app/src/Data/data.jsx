@@ -36,13 +36,13 @@ export const adminMenu = [
     },
     {
        name: "Doctors",
-       path: '/doctors',
+       path: '/admin/doctors',
        icon: "fa-solid fa-calendar-days",
     
     },
     {
         name: "Users",
-        path: '/users',
+        path: '/admin/users',
         icon: "fa-solid fa-user-doctor",
     },
     {

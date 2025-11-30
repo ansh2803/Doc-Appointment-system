@@ -1,9 +1,42 @@
 import React from 'react';
 import Layout from '../components/Layout';
-import { Row, Col, Input, Form, TimePicker } from 'antd';
+import { Row, Col, Input, Form, TimePicker, message } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { use } from 'react';
+import { showLoading, hideLoading } from '../redux/features/alertSlice';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+
 
 const ApplyDoctor = () => {
-  const handleFinish = (values) => {
+  const { user } = useSelector((state) => state.user);
+ 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  //handle form 
+  const handleFinish = async(values) => {
+    try {
+      dispatch(showLoading())
+      const res = await axios.post('/api/v1/user/apply-doctor', {...values, userId: user._id},{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      dispatch(hideLoading())
+      if(res.data.success){
+        message.success('Application Submitted Successfully')
+        navigate('/') 
+      } else {
+        message.error(res.data.message)
+      }
+
+    } catch (error) {
+      dispatch(hideLoading())
+      console.log(error);
+      message.error('Something went wrong');
+    }
+
     console.log(values);
   };
 
@@ -108,7 +141,7 @@ const ApplyDoctor = () => {
           <Col lg={8} md={12} sm={24}>
             <Form.Item
               label="Fee Per Consultation"
-              name="Fee Per Consultation"
+              name="feesPerCunsaltation"
               rules={[{ required: true, message: 'Please enter specialization' }]}
             >
               <Input placeholder="your contact no" />
@@ -118,7 +151,7 @@ const ApplyDoctor = () => {
           <Col lg={8} md={12} sm={24}>
             <Form.Item
               label="Timings"
-              name="Timings"
+              name="timings"
               rules={[{ required: true, message: 'Please enter years of experience' }]}
             >
               <TimePicker.RangePicker format="HH:mm" />
