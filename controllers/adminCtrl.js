@@ -2,6 +2,7 @@ const doctorModel = require('../models/doctorModel')
 const userModel = require('../models/userModel')
 
 
+
 const getAllUsersController = async (req, res) => {
     try {
         const users = await userModel.find({})
@@ -32,7 +33,7 @@ const changeAccountStatusController = async (req, res) => {
             message: `Your doctor account has been ${status}`,
             onClickPath: '/notifications'
         })
-        user.isDoctor === 'approved' ? true : false
+        user.isDoctor = status === 'approved' ? true : false
         await user.save()
         // await userModel.findByIdAndUpdate(user._id, {isDoctor: user.isDoctor, Notification})
         res.status(200).send({message:'Account status updated', success:true, data:doctor})

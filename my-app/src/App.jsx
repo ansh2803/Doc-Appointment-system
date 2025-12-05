@@ -1,6 +1,3 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -14,6 +11,8 @@ import ApplyDoctor from "./pages/ApplyDoctor";
 import NotificationPage from "./pages/NotificationPage";
 import Users from "./pages/admin/Users";
 import Doctors from "./pages/admin/Doctors";
+import Profile from "./pages/doctor/Profile";
+
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -22,10 +21,9 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {loading ? (
-          <Spinner />
-        ) : (
-          <Routes>
+        {/* Show spinner overlay but always keep routes mounted */}
+        {loading && <Spinner />}
+        <Routes>
             <Route
               path="/"
               element={
@@ -82,10 +80,25 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
 
           </Routes>
 
-        )}
         {/* <Routes>
         <Route path='/' element={<HomePage />}/>
         <Route path = '/login' element={<Login/>}/>

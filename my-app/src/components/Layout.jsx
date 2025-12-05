@@ -8,6 +8,8 @@ import { userMenu, adminMenu } from '../Data/data';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '../redux/features/userSlice';
 import { Badge } from 'antd';
+import 'antd/dist/reset.css';
+
 
 
 
@@ -25,8 +27,48 @@ const Layout = ({ children }) => {
     message.success('Logout Successfully')
     Navigate('/login')
   }
+  //Doctor menu
+ const doctorMenu = [
+    {
+        name: "Home",
+        path: '/',
+        icon: "fa-solid fa-house-user",
+    },
+    {
+       name: "Appointments",
+       path: '/appointments',
+       icon: "fa-solid fa-calendar-days",
+    
+    },
+   
+    {
+        name: "Profile",
+        path: `/doctor/profile/${user?._id}`,
+        icon: "fa-solid fa-user",
+    },
+];
+  
+  // Filter userMenu to hide "Apply Doctor" for approved doctors
+  const filteredUserMenu = userMenu.filter(menu => {
+    if (menu.name === "Apply Doctor" && user?.isDoctor) {
+      return false; // Hide "Apply Doctor" for approved doctors
+    }
+    return true;
+  });
+
+  // Update profile paths to include user ID
+  const processedUserMenu = filteredUserMenu.map(menu => ({
+    ...menu,
+    path: menu.path === '/profile' ? `/profile/${user?._id}` : menu.path
+  }));
+
+  const processedAdminMenu = adminMenu.map(menu => ({
+    ...menu,
+    path: menu.path === '/profile' ? `/profile/${user?._id}` : menu.path
+  }));
+
   //rendering menu list 
-  const sidebarMenu = user?.isAdmin ? adminMenu : userMenu;
+  const sidebarMenu = user?.isAdmin ? processedAdminMenu : user?.isDoctor ? doctorMenu : processedUserMenu;
 
   return (
     <>
@@ -70,7 +112,7 @@ const Layout = ({ children }) => {
                  <i className="fa-solid fa-bell"></i>
                </Badge>
                </span>
-                <Link to='/profile'>{user?.name}</Link>
+               {user && ( <Link to={`/doctor/profile/${user?._id}`}>{user?.name}</Link>)}
               </div>
             </div>
             <div className="body">{children}</div>

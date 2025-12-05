@@ -5,6 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const doctorModel = require('../models/doctorModel');
 
 
+
 const registerController = async (req, res) => {
   // return res.status(200).json({ success: true, message: 'login ok' })
   try {
@@ -172,8 +173,26 @@ const deleteAllNotificationController = async (req,res) => {
     })
   }
 }
+//get all doctors controller
+const getAllDoctorsController = async (req, res) => {
+  try {
+    const doctors = await doctorModel.find({ status: 'approved' });
+    res.status(200).send({
+      success: true,
+      message: 'Doctors fetched successfully',
+      data: doctors,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({  
+      message: 'Error in fetching doctors',
+      success: false,
+      error,
+    });
+  }
+};
 
 
-module.exports = { loginController, registerController, authController, applyDoctorController, getAllNotificationController, deleteAllNotificationController }
+module.exports = { loginController, registerController, authController, applyDoctorController, getAllNotificationController, deleteAllNotificationController, getAllDoctorsController }
 
 
