@@ -52,15 +52,20 @@ const Profile = () => {
   // handle form submit
   const handleFinish = async (values) => {
     try {
+      // Format timings as "06:00-09:00" string format
+      let timingsValue = null;
+      if (values.timings && values.timings.length === 2) {
+        const startTime = values.timings[0].format("HH:mm");
+        const endTime = values.timings[1].format("HH:mm");
+        timingsValue = `${startTime}-${endTime}`;
+      }
+      
       const res = await axios.post(
         "/api/v1/doctor/updateProfile",
         {
           ...values,
           userId: user._id,
-          timings: [
-            values.timings[0].format("HH:mm"),
-            values.timings[1].format("HH:mm"),
-          ],
+          timings: timingsValue,
         },
         {
           headers: {
@@ -91,13 +96,34 @@ const Profile = () => {
           // ]}}
           initialValues={{
             ...doctor,
-            timings:
-              doctor.timings?.length === 2
-                ? [
-                    dayjs(doctor.timings[0], "HH:mm"),
-                    dayjs(doctor.timings[1], "HH:mm"),
-                  ]
-                : [],
+            timings: (() => {
+              // Handle different timings formats
+              if (!doctor.timings) return [];
+              
+              // If timings is a string like "06:00-09:00"
+              if (typeof doctor.timings === 'string') {
+                const times = doctor.timings.split('-');
+                if (times.length === 2) {
+                  const startTime = dayjs(times[0].trim(), "HH:mm");
+                  const endTime = dayjs(times[1].trim(), "HH:mm");
+                  if (startTime.isValid() && endTime.isValid()) {
+                    return [startTime, endTime];
+                  }
+                }
+                return [];
+              }
+              
+              // If timings is an array
+              if (Array.isArray(doctor.timings) && doctor.timings.length === 2) {
+                const startTime = dayjs(doctor.timings[0], "HH:mm");
+                const endTime = dayjs(doctor.timings[1], "HH:mm");
+                if (startTime.isValid() && endTime.isValid()) {
+                  return [startTime, endTime];
+                }
+              }
+              
+              return [];
+            })(),
           }}
         >
           <h4>Personal Details</h4>

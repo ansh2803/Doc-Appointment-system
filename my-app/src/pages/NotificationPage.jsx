@@ -74,9 +74,9 @@ const NotificationPage = () => {
                 <h4 className='p-2 text-primary' style={{cursor: 'pointer'}} onClick={handleDeleteAllRead}>Delete All Read</h4>
             </div>
 
-             {user?.seenNotification.map((notificationMsg) => (
-              <div className='card' style ={{cursor: 'pointer'}}>
-                <div className='card-text' onClick={Navigate(notificationMsg.onClickPath)}>{notificationMsg.message}</div>
+             {user?.seenNotification.map((notificationMsg, index) => (
+              <div className='card' key={index} style ={{cursor: 'pointer'}}>
+                <div className='card-text' onClick={() => Navigate(notificationMsg.onClickPath)}>{notificationMsg.message}</div>
               </div>
             ))}
         </Tabs.TabPane>
